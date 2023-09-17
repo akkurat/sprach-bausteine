@@ -52,29 +52,39 @@ const nomen = [
     new Nomen("Dachs", Sex.M),
     new Nomen("Pferd", Sex.N),
     new Nomen("Hans", Sex.M),
-    
+]
+
+const nomenMz = [
+
+    new Nomen("Dachse", Sex.P),
+    new Nomen("Pferde", Sex.P),
+    new Nomen("Tücher", Sex.P),
 ]
 
 
 
 const sentemplates = [
-    //new Sentence('$pronomen $adjektiv Gartenzwerg', { sex: Sex.M }),
-    // new Sentence('$diese $adjektiv $tisch#o ist komplett unnütz.', { case: Fall.N }),
-    // new Sentence('$die $adjektiv $tisch#o ist komplett unnütz.', { case: Fall.N }),
-    // new Sentence('$eine $adjektiv $tisch#o ist komplett unnütz.', { case: Fall.N }),
-    // new Sentence('$einige $adjektiv $tisch#o sind komplett unnütz.', { case: Fall.N }),
-    // new Sentence('$der $tisch#o ist $adjektiv#p', { case: Fall.N }),
-    // new Sentence('$eine $nomen#o, $die ist schön', { case: Fall.N }),
-    // new Sentence('$pronomen $nomen#o macht nur blödsinn', { case: Fall.N }),
-    // new Sentence('Ich gebe dir diesen $adjektiv Köter', { case: Fall.A, sex: Sex.M }),
-    // new Sentence('$ein $adjektiv Clown ist $adjektiv', { case: Fall.A, sex: Sex.F }),
-    new Satz('$pronomen $adjektiv $nomen bedeutet $adjektiv2 $nomen', { case: Fall.N}),
-    // TODO: adjektiv is sensitiv only to pronomen before it (more or less)
+    new Satz('$pronomen $adjektiv Gartenzwerg', { sex: Sex.M }),
+    new Satz('$diese $adjektiv $tisch#o ist komplett unnütz.', { case: Fall.N }),
+    new Satz('$die $adjektiv $tisch#o ist komplett unnütz.', { case: Fall.N }),
+    new Satz('$eine $adjektiv $tisch#o ist komplett unnütz.', { case: Fall.N }),
+    new Satz('$einige $adjektiv $tisch#o sind komplett unnütz.', { case: Fall.N }),
+    new Satz('$pronomen $tisch#o ist $adjektiv#p', { case: Fall.N }),
+    new Satz('$eine $nomen#o, $die ist schön', { case: Fall.N }),
+    new Satz('$pronomen $nomen#o macht nur Blödsinn', { case: Fall.N }),
+    new Satz('Ich gebe dir diesen $adjektiv Köter', { case: Fall.A, sex: Sex.M }),
+    new Satz('$eine $adjektiv Clown ist $adjektiv', { case: Fall.A, sex: Sex.F }),
+    new Satz('$pronomen $adjektiv $nomen bedeutet $adjektiv2 $nomen', { case: Fall.N }),
+    new Satz('$adjektiv $nomen bedeutet $adjektiv2 $nomen2', { case: Fall.N }),
+    new Satz('$adjektiv $nomenMz sind alle $adjektiv2', { case: Fall.N })
 
 ]
 
 
-const context: Record<string, Word | Iterable<Word>> = { pronomen, diese, adjektiv, adjektiv2: adjektiv, kleinkariert, tisch, eine, nomen, die }
+const context: Record<string, Word | Iterable<Word>> = {
+    pronomen, diese, adjektiv, adjektiv2: adjektiv,
+    kleinkariert, tisch, eine, nomen, nomen2: nomen, die, nomenMz, einige
+}
 
 
 for (let i = 0; i < 100; i++) {
@@ -84,7 +94,7 @@ for (let i = 0; i < 100; i++) {
             console.log(out)
         }
         catch (e) {
-            // console.log(e)
+            console.log(e)
         }
     }
 }

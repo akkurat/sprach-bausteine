@@ -1,4 +1,4 @@
-import { Word, RenderContext } from "./satztest";
+import { Word, RenderContext } from "./common";
 
 export class Adjektiv implements Word {
     static lookup = new Map([

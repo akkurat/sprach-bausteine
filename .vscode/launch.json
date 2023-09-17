@@ -7,24 +7,11 @@
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}/randomrants.js",
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
-        }
-        ,
-        {
-            "type": "pwa-node",
-            "request": "launch",
             "name": "satztest",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/satztest.ts",
+            "program": "${file}",
             "runtimeArgs": ["-r", "ts-node/register"],
         }
     ]
