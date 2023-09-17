@@ -23,23 +23,8 @@ export class Satz {
 
         // determine the respective word
         // -> only for supporting iterables as word substituion
-        const halfStaticContext: Map<string, Word> = new Map();
-        for (const [variablename, info] of variableinfo) {
-            const lookup = context[variablename];
-
-            let word: Word;
-
-            if (Array.isArray(lookup)) {
-                word = rE(lookup);
-            }
-            else {
-                word = lookup;
-            }
-            const newContext = word.provideContext(info);
-            renderContext = { ...renderContext, ...newContext };
-
-            halfStaticContext.set(variablename, word);
-        }
+        let halfStaticContext: Map<string, Word> | undefined;
+        ({ halfStaticContext, renderContext } = this.halfStaticContext(variableinfo, context, renderContext));
 
         // TODO here: word type order
         
@@ -61,6 +46,27 @@ export class Satz {
 
         const out = this.s.replace(/\$([\p{L}\d]+)(#\w+)?/gu, replacer);
         return out;
+    }
+
+    private halfStaticContext(variableinfo: Map<string, string>, context: Record<string, any>, renderContext: RenderContext) {
+        const halfStaticContext: Map<string, Word> = new Map();
+        for (const [variablename, info] of variableinfo) {
+            const lookup = context[variablename];
+
+            let word: Word;
+
+            if (Array.isArray(lookup)) {
+                word = rE(lookup);
+            }
+            else {
+                word = lookup;
+            }
+            const newContext = word.provideContext(info);
+            renderContext = { ...renderContext, ...newContext };
+
+            halfStaticContext.set(variablename, word);
+        }
+        return { halfStaticContext, renderContext };
     }
 
     private copyCtx(): RenderContext {
