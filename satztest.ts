@@ -8,7 +8,7 @@ import { Satz } from "./Satz";
 
 
 
-const diese = new Pronomen('diese', 'dieser', 'dieser', 'diese', PDek.SCHWACH)
+const diese = new Pronomen('diese', 'dieser', 'dieses', 'diese', PDek.SCHWACH)
 const eine = new Pronomen('eine', 'ein', 'ein', undefined, PDek.STARK)
 const die = new Pronomen('die', 'der', 'das', 'die', PDek.SCHWACH)
 const jene = new Pronomen('jene', 'jener', 'jener', 'jene', PDek.SCHWACH)
@@ -61,8 +61,6 @@ const nomenMz = [
     new Nomen("Tücher", Sex.P),
 ]
 
-
-
 const sentemplates = [
     new Satz('$pronomen $adjektiv Gartenzwerg', { sex: Sex.M }),
     new Satz('$diese $adjektiv $tisch#o ist komplett unnütz.', { case: Fall.N }),
@@ -87,8 +85,12 @@ const context: Record<string, Word | Iterable<Word>> = {
 }
 
 
-for (let i = 0; i < 100; i++) {
-    for (const sentemplate of sentemplates) {
+const outdir = new Date().toString();
+for (const sentemplate of sentemplates) {
+
+    const out = sentemplate.renderToFs(context, outdir)
+
+    for (let i = 0; i < 100; i++) {
         try {
             const out = sentemplate.render(context)
             console.log(out)

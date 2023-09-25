@@ -1,3 +1,5 @@
+import{ PathLike, writeFileSync, mkdirSync } from "node:fs"
+import * as path from "node:path"
 import { rE } from "./randint";
 import { SentenceProperties, Fall, PDek, RenderContext, Word } from "./common";
 
@@ -12,19 +14,48 @@ export class Satz {
         this.sProps = { sex: undefined, case: Fall.N, dek: PDek.STARK, ...properties };
     }
 
-    render(context: Record<string, any>) {
+    renderToFs(context: Record<string, any>, outPath: PathLike) {
+        
 
+        let renderContextIn: RenderContext = this.copyCtx();
+        const variableinfo: Map<string, string> = this.createAndCheckContext(context);
+        mkdirSync(outPath, {recursive:true})
+
+        for (const [variablename, info] of variableinfo) {
+            const lookup  = context[variablename];
+
+            const words: Word[] = Array.isArray(lookup) ? lookup : [lookup]
+
+            mkdirSync(path.join(outPath.toString(),variablename ), {recursive:true})
+            
+            for( const [i,word] of words.entries() )
+            {
+                writeFileSync(path.join(outPath.toString(), variablename, ''+i), word.provideContext( info ) + word.toString()) 
+            }
+            
+
+        }
+
+
+
+
+
+
+
+    }
+
+    render(context: Record<string, any>) {
         const variableinfo: Map<string, string> = this.createAndCheckContext(context);
 
         // Default Context 
         // some sentence don't need all informations
         // e.g. no adjektiv
-        let renderContext: RenderContext = this.copyCtx();
+        let renderContextIn: RenderContext = this.copyCtx();
 
         // determine the respective word
         // -> only for supporting iterables as word substituion
-        let halfStaticContext: Map<string, Word> | undefined;
-        ({ halfStaticContext, renderContext } = this.halfStaticContext(variableinfo, context, renderContext));
+        const { halfStaticContext, renderContext } = this.halfStaticContext(variableinfo, context, renderContextIn);
+
 
         // TODO here: word type order
         
@@ -47,6 +78,7 @@ export class Satz {
         const out = this.s.replace(/\$([\p{L}\d]+)(#\w+)?/gu, replacer);
         return out;
     }
+
 
     private halfStaticContext(variableinfo: Map<string, string>, context: Record<string, any>, renderContext: RenderContext) {
         const halfStaticContext: Map<string, Word> = new Map();
@@ -99,3 +131,4 @@ export class Satz {
         return variableinfo;
     }
 }
+
