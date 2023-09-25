@@ -1,0 +1,37 @@
+<div id="outer">
+    <div id="test2">
+        <div id="test">
+            <div>234</div>
+            <div>2342</div>
+            <div>23423</div>
+            <div>234234</div>
+        </div>
+    </div>
+</div>
+<style>
+    html {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    #test2 {
+        overflow-wrap: normal;
+    }
+
+    #outer {
+    }
+
+    #test {
+        font-size: 120px;
+        display: flex;
+        flex-flow: column wrap;
+        height: 70px;
+    }
+
+    #test>* {
+        display: inline-block;
+        height: 50px;
+        overflow: hidden;
+    }
+
+</style>

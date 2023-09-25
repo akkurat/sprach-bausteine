@@ -1,0 +1,101 @@
+
+export function detectAscii(input: string): boolean {
+
+    // veryprimitive: ratio whitspace
+
+    const ratio = wsRatio(input);
+
+    //    linesWithChords
+
+
+
+
+    return ratio > 0.2
+
+
+}
+
+function wsRatio(input: string) {
+    let whitespaceCunt = 0;
+    for (const s of input) {
+        if (/\s/.test(s)) {
+            whitespaceCunt++;
+        }
+    }
+
+    const ratio = whitespaceCunt / input.length;
+    console.log("wscount ratio", ratio);
+    return ratio;
+}
+
+
+const matchchord = /^\(?([a-h](#|b)?)(-|\+|m?(?!aj))([^a-z](.*))?$/i;
+
+export function convert(text: string) {
+
+    let out = "";
+
+    const lines: string[] = text.split(/\r?\n/)
+
+    let lastChordMap: Map<number, string> = null;
+    for (const line of lines) {
+        if (isChordLine(line)) {
+            lastChordMap = parseChords(line)
+        } else {
+            if (lastChordMap) {
+                out += pair(lastChordMap, line)
+                lastChordMap = null;
+            } else {
+                out += line
+            }
+            out += '\n'
+        }
+    }
+    return out;
+}
+
+function isChordLine(str: string) {
+
+    const parts = str.trim().split(/\s+/)
+
+    let numChords = 0, numNonChords = 0
+
+    for (let part of parts) {
+        // console.log(matchchord.exec(part))
+        if (matchchord.test(part)) {
+            numChords++;
+        } else {
+            numNonChords++;
+        }
+    }
+    return numChords > numNonChords;
+
+}
+
+function parseChords(str: string) {
+    const re = /\S+/g
+    const returnValue = new Map()
+    let match: RegExpExecArray
+    while ((match = re.exec(str))) {
+        returnValue.set(match.index, match[0])
+    }
+    return returnValue
+}
+
+function pair(map: Map<number, string>, str: string) {
+    let output = ""
+    if (map.size > str.length) {
+        return Array.from(map.values())
+            .map(c => `[${c}]`)
+            .join('')
+    }
+    for (let i = 0; i < str.length; i++) {
+        if (map.has(i)) {
+            output += `[${map.get(i)}]`
+        }
+        output += str.charAt(i)
+    }
+    return output;
+
+}
+
